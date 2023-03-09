@@ -1,9 +1,10 @@
-from pymongo import MongoClient
+from pymongo import mongo_client
+from .settings import settings
+client = mongo_client.MongoClient(settings.DATABASE_URL)
 
-mongo = 'mongodb://localhost:27017/rh-db'
-client = MongoClient(mongo)
-db = client['rh-db']
+db = client[settings.MONGO_INITDB_DATABASE]
+User = db.users
+Camera = db.posts
 
-cameras = db['cameras']
-users = db['users']
-
+User.create_index("email", unique=True)
+Camera.create_index("id", unique=True)
