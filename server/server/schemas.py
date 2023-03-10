@@ -9,7 +9,8 @@ class UserSchema(BaseModel):
 
 class ImgSchema(BaseModel):
     img: str
-    # date: 
+    date: str
+
     class Config:
         orm_mode = True
 
@@ -18,14 +19,20 @@ class CameraResponseSchema(BaseModel):
     name: str
     coords: list[float] # 
     active: bool
-    url: str
+    ip: str
     img: ImgSchema
     class Config:
         orm_mode = True
 
-class LocationSchema(BaseModel):
-    date: str
-    img: str
+class LocationResponseSchema(BaseModel):
+    cameras: list[CameraResponseSchema]
+
+    class Config:
+        orm_mode = True
+
+class LocationRequestSchema(BaseModel):
+    lon: float
+    lan: float
 
     class Config:
         orm_mode = True

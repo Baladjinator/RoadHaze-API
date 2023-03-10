@@ -1,5 +1,4 @@
-from fastapi import APIRouter, status, HTTPException, Response, Request
-from .. import schemas
+from fastapi import APIRouter, status, HTTPException, Request
 from .. import db
 from fastapi.responses import JSONResponse
 
@@ -15,8 +14,12 @@ async def initCam(request: Request):
 
     try:
         r = db.Camera.insert_one({
+            'ip': request.client.host,
             'name': jsonObj.get('name'),
-            'location': [jsonObj.get('lon'), jsonObj.get('lan')],
+            'loc': {
+                'type': 'Point',
+                'coordinates': [jsonObj.get('lon'), jsonObj.get('lan')]
+            },
             'enabled': True,
             'image': None
         })
@@ -27,4 +30,7 @@ async def initCam(request: Request):
 
 @router.post('/cam_image')
 async def getCamImage(request: Request):
-    print(await request.json())
+    jsonObj = await request.json()
+    r = db.Camera.update_one({'_id': jsonObj.get('id')}, {'$set': {'image': jsonObj.get('image'), 'date': jsonObj.get('date')}})
+
+# TODO: check if camera is active

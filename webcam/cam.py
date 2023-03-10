@@ -41,6 +41,7 @@ def init():
         'lan': conf.get('lan')
     }
     
+    # TODO: FIX THIS
     r = requests.post(conf.get('s_url_init') , data=json.dumps(jsonObj), headers=headers)
     
     print(type(conf.get('lon')))

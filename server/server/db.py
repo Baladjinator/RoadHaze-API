@@ -1,4 +1,4 @@
-from pymongo import mongo_client
+from pymongo import mongo_client, GEOSPHERE
 from .settings import settings
 client = mongo_client.MongoClient(settings.DATABASE_URL)
 
@@ -8,4 +8,4 @@ Camera = db.cameras
 
 User.create_index("email", unique=True)
 # Camera.create_index("2dsphere", unique=False)
-# Camera.create_index("_id", unique=True)
+Camera.ensure_index([("loc", GEOSPHERE)])
