@@ -19,7 +19,7 @@ def getNearby(request: schemas.LocationRequestSchema):
     for doc in db.Camera.find():
         camCoords = (doc['lat'], doc['lon'])
         distance = geopy.distance.distance(clientCoords, camCoords).km
-        if distance <= request.radius * 1000:
+        if distance <= request.radius / 1000:
             responseList.append({
                 'id': str(doc['_id']),
                 'name': doc['name'],

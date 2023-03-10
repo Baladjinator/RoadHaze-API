@@ -44,7 +44,7 @@ def init():
         'name': conf.get('name'),
         'lon': conf.get('lon'),
         'lat': conf.get('lat')
-    }-+
+    }
     
     r = requests.post(conf.get('s_url_init') , json=jsonObj, headers=headers)
     
