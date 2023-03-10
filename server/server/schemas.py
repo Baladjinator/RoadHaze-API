@@ -3,18 +3,29 @@ from pydantic import BaseModel
 class UserSchema(BaseModel):
     email: str
     password: str
-    bookmarks: list
 
     class Config:
         orm_mode = True
 
-class CameraBaseSchema(BaseModel):
+class ImgSchema(BaseModel):
+    img: str
+    # date: 
+    class Config:
+        orm_mode = True
+
+class CameraResponseSchema(BaseModel):
     id: str
     name: str
-    lat: float
-    lon: float
+    coords: list[float] # 
     active: bool
     url: str
+    img: ImgSchema
+    class Config:
+        orm_mode = True
+
+class LocationSchema(BaseModel):
+    date: str
+    img: str
 
     class Config:
         orm_mode = True
