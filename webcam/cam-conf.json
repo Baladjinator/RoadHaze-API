@@ -1,1 +1,0 @@
-{"name": "Test", "s_url_init": "http://192.168.1.102:9009/camera/init", "s_url": "http://192.168.1.102:9009/camera/cam_image", "lon": 124.123123, "lan": 123.123123, "id": "640a8556c9495ab1f70e5364", "detail": [{"loc": ["body", "lat"], "msg": "field required", "type": "value_error.missing"}]}
