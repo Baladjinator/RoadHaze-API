@@ -10,7 +10,7 @@ class UserSchema(BaseModel):
 class ImgSchema(BaseModel):
     img: str
     date: str
-
+    status: str
     class Config:
         orm_mode = True
 
