@@ -20,35 +20,28 @@ async def initCam(request: Request):
     jsonObj = await request.json()
 
     try:
+        print(jsonObj.get('lat'))
         r = db.Camera.insert_one({
-            'ip': request.client.host,
             'name': jsonObj.get('name'),
-            'loc': {
-                'type': 'Point',
-                'coordinates': [jsonObj.get('lon'), jsonObj.get('lan')]
-            },
-            'enabled': True,
+            'lat': jsonObj.get('lat'),
+            'lon': jsonObj.get('lon'),
             'image': None
         })
     except Exception as e:
+        print(e.__str__())
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             detail=e.__str__())
-    print(r.inserted_id)
     return JSONResponse(status_code=status.HTTP_201_CREATED, content={'id': str(r.inserted_id)})
 
-num = 0
+# num = 0
 
 @router.post('/cam_image')
 async def getCamImage(request: Request):
-    global num
+    # global num
     jsonObj = await request.json()
     objid = ObjectId(jsonObj.get('id'))
 
     img = base64.b64decode(jsonObj.get('img'))
-    
-    with open('test' + str(num) + '.png', 'wb') as f:
-        f.write(img)
-        num += 1
 
     img = Image.open(io.BytesIO(img))
     img = np.array(img)

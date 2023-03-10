@@ -1,30 +1,34 @@
 from fastapi import APIRouter, status
 from fastapi.responses import JSONResponse
-from pymongo import SON
+from bson import BSON
 from .. import db
 from .. import schemas
+from bson.son import SON
+import geopy.distance
 
 router = APIRouter(
     prefix='/location',
     tags=['Location']
 )
 
-router.get('/nearby')
+@router.post('/nearby')
 def getNearby(request: schemas.LocationRequestSchema):
     responseList = []
-    for doc in db.Camera.find({"loc" : SON([("$near", { "$geometry" : SON([("type", "Point"), ("coordinates", [request.get('lon'), request.get('lan')])])}), ("$maxDistance", 10000)])}):
-        responseList.append(
-            {
-                'id': str(doc.get('_id')),
-                'name': doc.get('name'),    
-                'coords': doc.get('loc').get('coordinates'),
-                'active': doc.get('enabled'),
-                'img': {
-                    'img': doc.get('image').get('img'),
-                    'date': doc.get('image').get('date'),
-                    'status': doc.get('status')
+    clientCoords = (request.lat, request.lon)
+    
+    for doc in db.Camera.find():
+        camCoords = (doc['lat'], doc['lon'])
+        distance = geopy.distance.distance(clientCoords, camCoords).km
+        if distance <= request.radius * 1000:
+            responseList.append({
+                'id': str(doc['_id']),
+                'name': doc['name'],
+                'lat': doc['lat'],
+                'lon': doc['lon'],
+                'image': {
+                    'img': doc['image']['img'],
+                    'date': doc['image']['date'],
+                    'status': doc['image']['status']
                 }
-            }
-        )
-
-    return JSONResponse(status_code=status.HTTP_200_OK, content={'cameras': responseList})
+            })
+    return JSONResponse(status_code=status.HTTP_200_OK, content=responseList)

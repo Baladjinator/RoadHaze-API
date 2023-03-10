@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 import uvicorn
-from server.routes import users, cameras
+from server.routes import users, cameras, location
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -23,6 +23,7 @@ def index():
 
 app.include_router(users.router)   
 app.include_router(cameras.router)
+app.include_router(location.router)
 
 if __name__ == '__main__':
     uvicorn.run("app:app", host='0.0.0.0', port=9009, reload=True)

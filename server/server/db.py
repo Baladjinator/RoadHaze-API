@@ -7,5 +7,4 @@ User = db.users
 Camera = db.cameras
 
 User.create_index("email", unique=True)
-# Camera.create_index("2dsphere", unique=False)
-Camera.create_index([("loc", GEOSPHERE)])
+# Camera.create_index([("location", GEOSPHERE)])
