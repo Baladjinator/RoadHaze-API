@@ -8,7 +8,6 @@ import io
 from PIL import Image
 import numpy as np
 from torchvision import transforms
-# import cv2
 
 router = APIRouter(
     prefix='/camera',
@@ -47,16 +46,11 @@ async def getCamImage(request: Request):
     img = Image.open(io.BytesIO(img))
     img = np.array(img)
 
-    grayImage = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-  
-    (thresh, blackAndWhiteImage) = cv2.threshold(grayImage, 127, 255, cv2.THRESH_BINARY)
-
     convert_tensor = transforms.ToTensor()
-    imgT = convert_tensor(blackAndWhiteImage)
+    imgT = convert_tensor(img)
 
     label = eval_for_camera(model, imgT, labels_names)
     print(label)
-
     r = db.Camera.update_one({'_id': objid}, {'$set': {'image': {'img': jsonObj.get('img'), 'date': jsonObj.get('date'), 'status': label}}})
     if r.modified_count == 0:
         print('no camera found')
