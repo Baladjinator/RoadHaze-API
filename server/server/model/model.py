@@ -53,7 +53,7 @@ def eval_for_camera(model: torch.nn.Module,
     return labels_names[eval(model, random_Image).squeeze(dim=0)]
 
 model = ResNet18(6)
-model.load_state_dict(torch.load("/Users/alekogeorgiev/Documents/GitHub/RoadHaze-API/server/server/model/epoch-15.pth", map_location=torch.device('cpu')))
+model.load_state_dict(torch.load("./server/model/epoch-15.pth", map_location=torch.device('cpu'))["model_state_dict"])
 
 labels_names = ['dry', 'fresh', 'ice', 'melted', 'water', 'wet']
 
